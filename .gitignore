@@ -1,0 +1,55 @@
+# Ignorar salidas de compilación
+**/bin/
+**/obj/
+.vs/
+*.pdb
+*.exe
+*.dll
+*.log
+
+# Ignorar archivos específicos de usuario
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Ignorar archivos de configuración de aplicación (si no quieres que estén en el repositorio)
+appsettings.Development.json
+
+# Ignorar archivos de Docker generados durante las compilaciones
+**/Dockerfile.dev
+docker-compose.override.yml
+
+# Ignorar archivos específicos de IDE (Visual Studio, JetBrains, etc.)
+.vscode/
+.idea/
+*.csproj.user
+*.sln.user
+*.swp
+*.vim
+
+# Ignorar logs y archivos temporales
+*.log
+*.tmp
+*.temp
+*.bak
+
+# Ignorar archivos específicos de Mac
+.DS_Store
+
+# Ignorar dependencias de Node.js (si las hay)
+node_modules/
+npm-debug.log
+yarn-error.log
+
+# Ignorar caché de dependencias por NuGet
+*.nupkg
+*.snupkg
+
+# Ignorar archivos de bloqueo de paquetes
+package-lock.json
+yarn.lock
+
+# Ignorar reportes de cobertura
+coverage/
+*.coverlet.msbuild/
