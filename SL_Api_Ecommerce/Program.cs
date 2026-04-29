@@ -2,8 +2,6 @@ using Microsoft.EntityFrameworkCore;
 using SL_Api_Ecommerce.Data;
 using SL_Api_Ecommerce.Repository;
 using SL_Api_Ecommerce.Repository.IRepository;
-using Microsoft.Extensions.DependencyInjection; // Asegúrate de tener este using
-using Microsoft.AspNetCore.Builder;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,6 +9,7 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"))
 );
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddAutoMapper(cfg => {
     // Configuración de AutoMapper si es necesaria
 }, typeof(Program));
