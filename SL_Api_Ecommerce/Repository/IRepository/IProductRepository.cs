@@ -6,7 +6,7 @@ namespace SL_Api_Ecommerce.Repository.IRepository
     {
         ICollection<Product> GetProducts();
         ICollection<Product> GetProductsforCategory(int categoryId);
-        ICollection<Product> SearchProduct(string name);
+        ICollection<Product> SearchProducts(string searchTerm);
         bool BuyProduct(string name, int quantity);
         Product? GetProduct(int productId);
         bool ProductExists(int id);

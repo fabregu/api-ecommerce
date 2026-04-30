@@ -1,7 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
-
-namespace SL_Api_Ecommerce.Models.Dtos
+﻿namespace SL_Api_Ecommerce.Models.Dtos
 {
     public class ProductDto
     {
@@ -15,6 +12,6 @@ namespace SL_Api_Ecommerce.Models.Dtos
         public DateTime CreationDate { get; set; } = DateTime.Now;
         public DateTime? UpdateDate { get; set; } = null;
         public int CategoryId { get; set; }
-        public required Category Category { get; set; }
+        public string CategoryName { get; set; } = string.Empty;
     }
 }

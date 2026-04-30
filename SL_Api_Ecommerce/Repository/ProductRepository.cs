@@ -1,4 +1,5 @@
-﻿using SL_Api_Ecommerce.Data;
+﻿using Microsoft.EntityFrameworkCore;
+using SL_Api_Ecommerce.Data;
 using SL_Api_Ecommerce.Models;
 using SL_Api_Ecommerce.Repository.IRepository;
 
@@ -42,18 +43,18 @@ namespace SL_Api_Ecommerce.Repository
             return Save();
         }
 
-        public Product? GetProduct(int productId)
+        public Product? GetProduct(int id)
         {
-            if(productId <= 0)
+            if(id <= 0)
             {
                 return null;
             }
-            return _db.Products.FirstOrDefault(p => p.ProductId == productId);
+            return _db.Products.Include(p => p.Category).FirstOrDefault(p => p.ProductId == id);
         }
 
         public ICollection<Product> GetProducts()
         {
-            return _db.Products.OrderBy(p => p.Name).ToList();
+            return _db.Products.Include(p => p.Category).OrderBy(p => p.Name).ToList();
         }
 
         public ICollection<Product> GetProductsforCategory(int categoryId)
@@ -62,7 +63,7 @@ namespace SL_Api_Ecommerce.Repository
             {
                 return new List<Product>();
             }
-            return _db.Products.Where(p => p.CategoryId == categoryId).OrderBy(p => p.Name).ToList();
+            return _db.Products.Include(p => p.Category).Where(p => p.CategoryId == categoryId).OrderBy(p => p.Name).ToList();
         }
 
         public bool DeleteProduct(Product product)
@@ -109,12 +110,16 @@ namespace SL_Api_Ecommerce.Repository
             return _db.SaveChanges() > 0;
         }
 
-        public ICollection<Product> SearchProduct(string name)
+        public ICollection<Product> SearchProducts(string searchTerm)
         {
             IQueryable<Product> query = _db.Products;
-            if(!string.IsNullOrWhiteSpace(name))
+
+            var searchTermLowered = searchTerm.ToLower().Trim();
+            if(!string.IsNullOrWhiteSpace(searchTerm))
             {
-                query = query.Where(p => p.Name.ToLower().Contains(name.ToLower()));
+                query = query.Include(p => p.Category).Where(
+                    p => p.Name.ToLower().Trim().Contains(searchTermLowered) ||
+                    p.Description.ToLower().Trim().Contains(searchTerm.ToLower().Trim()));
             }
             return query.OrderBy(p => p.Name).ToList();
         }
