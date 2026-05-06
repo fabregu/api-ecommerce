@@ -103,7 +103,6 @@ namespace SL_Api_Ecommerce.Repository
             };
         }
 
-
         public async Task<User> Register(CreateUserDto createUserDto)
         {
             var encryptedPassword = BCrypt.Net.BCrypt.HashPassword(createUserDto.Password!);
