@@ -1,14 +1,15 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using SL_Api_Ecommerce.Models;
 using SL_Api_Ecommerce.Models.Dtos;
 using SL_Api_Ecommerce.Repository.IRepository;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace SL_Api_Ecommerce.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class CategoriesController : ControllerBase
     {
         private readonly ICategoryRepository _categoryRepository;
