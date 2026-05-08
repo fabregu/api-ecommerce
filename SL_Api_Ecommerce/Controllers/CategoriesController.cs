@@ -22,12 +22,15 @@ namespace SL_Api_Ecommerce.Controllers
         }
 
         [HttpGet]
+        [ResponseCache(Duration = 10)] // Cachear la respuesta durante 60 segundos
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetCategories()
         {
+            System.Console.WriteLine("Obteniendo categorias...");
             var categories = _categoryRepository.GetCategories();
             var categoriesDto = new List<CategoryDto>();
+            System.Console.WriteLine($"Mapeando categorias a DTOs... {categories}");
             foreach (var category in categories)
             {
                 categoriesDto.Add(_mapper.Map<CategoryDto>(category));
@@ -35,14 +38,19 @@ namespace SL_Api_Ecommerce.Controllers
             return Ok(categoriesDto);
         }
 
+        [AllowAnonymous]
         [HttpGet("{id:int}", Name = "GetCategory")]
+        //[ResponseCache(Duration = 10)] // Cachear la respuesta durante 60 segundos
+        [ResponseCache(CacheProfileName = "Default10")] // Cachear la respuesta durante 10 segundos
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         public IActionResult GetCategory(int id)
         {
+            System.Console.WriteLine($"Obteniendo categoria con id {id}...");
             var category = _categoryRepository.GetCategory(id);
+            System.Console.WriteLine($"Respuesta categoria con id {id} obtenida.");
             if (category == null)
                 return NotFound($"La categoria con el id {id} no existe.");
             var categoryDto = _mapper.Map<CategoryDto>(category);

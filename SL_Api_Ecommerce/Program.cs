@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using SL_Api_Ecommerce.Data;
@@ -11,6 +12,15 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("defaultConnection"))
 );
+
+builder.Services.AddResponseCaching(options =>
+{
+    options.MaximumBodySize = 1024; // Tamaño máximo de la respuesta en bytes
+    options.SizeLimit = 1024 * 1024 * 100; // Tamaño máximo total del caché en bytes (100 MB)
+    options.UseCaseSensitivePaths = true; // Considerar mayúsculas y minúsculas en las rutas
+}
+);
+
 builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
@@ -40,7 +50,18 @@ builder.Services.AddAuthentication(options =>
         options.Audience = "ecommerce-api";
     });
 
-builder.Services.AddControllers();
+builder.Services.AddControllers(options =>
+{
+    options.CacheProfiles.Add("Default10", new CacheProfile
+    {
+        Duration = 10 // Duración del caché en segundos
+    });
+    options.CacheProfiles.Add("Default20", new CacheProfile
+    {
+        Duration = 20 // Duración del caché en segundos
+    });
+}
+);
 
 builder.Services.AddEndpointsApiExplorer(); // Necesario para Swagger
 builder.Services.AddSwaggerGen();
@@ -67,6 +88,8 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseCors("AllowAEspecificOrigin");
+
+app.UseResponseCaching();
 
 app.UseAuthentication();
 app.UseAuthorization();
